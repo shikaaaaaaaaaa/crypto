@@ -11,7 +11,7 @@
 
 import java.math.BigInteger;
 
-public class RSAExample {
+public class RSA {
     // RSA public key components
     private static final BigInteger N = new BigInteger("2038667");
     private static final BigInteger e = new BigInteger("103");
