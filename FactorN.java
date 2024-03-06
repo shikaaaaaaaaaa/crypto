@@ -19,21 +19,38 @@ public class FactorN {
         BigInteger d2 = new BigInteger("11514115");
 
         // Calculate potential p and q using e1 and d1
-        BigInteger edDiff1 = e1.multiply(d1).subtract(BigInteger.ONE);
-        BigInteger pq1 = edDiff1.divide(N.subtract(BigInteger.ONE));
-        BigInteger p1 = N.subtract(edDiff1.mod(N.subtract(BigInteger.ONE)));
-
-        // Calculate potential p and q using e2 and d2
-        BigInteger edDiff2 = e2.multiply(d2).subtract(BigInteger.ONE);
-        BigInteger pq2 = edDiff2.divide(N.subtract(BigInteger.ONE));
-        BigInteger p2 = N.subtract(edDiff2.mod(N.subtract(BigInteger.ONE)));
+        BigInteger phiN = phi(N);
+        BigInteger p1 = e1.modInverse(phiN);
+        BigInteger p2 = d1.modInverse(phiN);
 
         System.out.println("Potential prime factors using e = 10988423 and d = 16784693:");
         System.out.println("p1 = " + p1);
-        System.out.println("p2 = " + pq1.subtract(p1));
+        System.out.println("p2 = " + p2);
+        
+        // Calculate potential p and q using e2 and d2
+        p1 = e2.modInverse(phiN);
+        p2 = d2.modInverse(phiN);
         
         System.out.println("\nPotential prime factors using e = 25910155 and d = 11514115:");
-        System.out.println("p1 = " + p2);
-        System.out.println("p2 = " + pq2.subtract(p2));
+        System.out.println("p1 = " + p1);
+        System.out.println("p2 = " + p2);
+    }
+    
+    // Function to calculate Euler's totient function
+    public static BigInteger phi(BigInteger n) {
+        BigInteger result = n;
+        BigInteger i = new BigInteger("2");
+        while (i.multiply(i).compareTo(n) <= 0) {
+            if (n.mod(i).equals(BigInteger.ZERO)) {
+                while (n.mod(i).equals(BigInteger.ZERO))
+                    n = n.divide(i);
+                result = result.subtract(result.divide(i));
+            }
+            i = i.add(BigInteger.ONE);
+        }
+        if (n.compareTo(BigInteger.ONE) > 0)
+            result = result.subtract(result.divide(n));
+        return result;
     }
 }
+
